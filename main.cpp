@@ -9,7 +9,6 @@ const int NUM_MONKEYS = 3;
 const int NUM_DAYS = 5;
 
 
-
 void fillArray (float array[][NUM_DAYS], int NUM_MONKEYS)
 {
     for (int monkeys = 0; monkeys < NUM_MONKEYS; monkeys++)
@@ -27,71 +26,69 @@ void fillArray (float array[][NUM_DAYS], int NUM_MONKEYS)
     }
 }
 
-float calcAvg (float array[][NUM_DAYS], int NUM_MONKEYS)
+
+void calcMax (float array[][NUM_DAYS], int NUM_MONKEYS)
 {
-    float total;
-    float average;
+    float max[3] = { 0, 0, 0 }; // 0 = Bananas 1 = Days 2 = Monkeys
     for (int monkeys = 0; monkeys < NUM_MONKEYS; monkeys++)
     {
         for (int days = 0; days < NUM_DAYS; days++)
+        {
+            if (array[monkeys][days] > max[0])
+            {
+                max[0] = array[monkeys][days];
+                max[1] = days + 1;
+                max[2] = monkeys + 1;
+            }
+        }
+    }
+    cout << "Monkey number " << max[2] << " ate the most amount of food " << endl;
+    cout << max[0] << " pounds, on day " <<  max[1] << endl;
+    
+}
+
+void calcMin (float array[][NUM_DAYS], int NUM_MONKEYS)
+{
+    float min[3] = { 0, 0, 0 };
+    for (int monkeys = 0; monkeys < NUM_MONKEYS; monkeys++)
+    {
+        for (int days = 0; days < NUM_DAYS; days++)
+        {
+            if (array[monkeys][days] < min[0] || (days == 0 && monkeys == 0))
+            {
+                min[0] = array[monkeys][days];
+                min[1] = days + 1;
+                min[2] = monkeys + 1;
+            }
+        }
+    }
+    cout << "Monkey number " << min[2] << " ate the least amount of food " << endl;
+    cout << min[0] << " pounds, on day " <<  min[1] << endl;
+}
+
+void showAverage (float array[][NUM_DAYS], int numMonkeys)
+{
+    cout << endl;
+    float total = 0;
+    for (int days = 0; days < NUM_DAYS; days++)
+    {
+       	for (int monkeys = 0; monkeys < numMonkeys; monkeys++)
+        {
             total += array[monkeys][days];
-        average = total / 3;
-    }
-    return average;
-}
-
-float calcMax (float array[][NUM_DAYS], int NUM_MONKEYS)
-{
-    float max = array[0][0];
-    for (int monkeys = 0; monkeys < NUM_MONKEYS; monkeys++)
-    {
-        for (int days = 0; days < NUM_DAYS; days++)
-        {   if (array[monkeys][days] > max)
-            max = array[monkeys][days];
         }
+        cout << "The average amount of food eaten on day " << days + 1 << "  is: " << total / 3 << " pounds." << endl;
+        total = 0;
     }
-    return max;
-    
-}
-
-float calcMin (float array[][NUM_DAYS], int NUM_MONKEYS)
-{
-    float min = array[0][0];
-    for (int monkeys = 0; monkeys < NUM_MONKEYS; monkeys++)
-    {
-        for (int days = 0; days < NUM_DAYS; days++)
-        { if (array[monkeys][days] < min)
-            min = array[monkeys][days];
-        }
-    }
-    return min;
-}
-
-void showArray (float array[][NUM_DAYS], int NUM_MONKEYS, float average, float max, float min)//[NUM_DAYS])
-{
-    cout << endl;
-    cout << endl;
-    cout << "The average amount of food eaten (in pounds) by all monkeys is: " << average << " pounds." << endl;
-    cout << "The greatest amount of food eaten (in pounds) by one monkey this week is: " << max << " pounds." << endl;
-    cout << "The least amount of food eaten (in pounds) by one monkey this week is: " <<min << " pounds." << endl;
-    
     cout << endl;
 }
-
-
-
 
 
 int main()
 {
     float food[NUM_MONKEYS][NUM_DAYS];
-    float min, max, average;
-    
     fillArray (food, NUM_MONKEYS);
-    max = calcMax (food, NUM_MONKEYS);
-    min = calcMin (food, NUM_MONKEYS);
-    average = calcAvg (food, NUM_MONKEYS);
-    
-    showArray (food, NUM_MONKEYS, average, max, min);
+    showAverage (food, NUM_MONKEYS);
+    calcMin (food, NUM_MONKEYS);
+    calcMax (food, NUM_MONKEYS);
     return 0;
 }
